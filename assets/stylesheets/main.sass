@@ -46,3 +46,22 @@ body
     width: 100%
     &:blur
       font-style: italic !important
+
+
+.transition-left
+  -webkit-animation: moveLeft 3s 0
+  animation: moveLeft 3s 0
+  position: absolute
+  -webkit-animation-fill-mode: forwards
+  animation-fill-mode: forwards
+
+
+@-webkit-keyframes moveLeft
+  from
+    width: 50%
+    left: relative
+    top: relative
+  to
+    top: 50px
+    left: 20px
+    width: 200px
