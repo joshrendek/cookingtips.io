@@ -1,22 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"github.com/shaoshing/train"
 	"gopkg.in/pg.v2"
 	"html/template"
 	"math/rand"
 	"net/http"
 	"os"
-	"strings"
-	//	"time"
 )
 
 var err error
 var DB *pg.DB
 
 func SetupDB() {
-	//dbString := os.Getenv("HEROKU_POSTGRESQL_BLUE_URL")
 	DB = pg.Connect(&pg.Options{User: "joshrendek", Database: "cookingtips"})
 	if err != nil {
 		panic(err)
@@ -54,30 +50,6 @@ func adminHandler(w http.ResponseWriter, r *http.Request) {
 	tpl.ExecuteTemplate(w, "admin", nil)
 }
 
-func createPageHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	//_, _ := ioutil.ReadAll(r.Body)
-	title := r.FormValue("title")
-	instructions := strings.Split(r.FormValue("instructions"), "\n")
-	youtubes := strings.Split(r.FormValue("youtubes"), "\n")
-	articles := strings.Split(r.FormValue("articles"), "\n")
-	tags := strings.Split(r.FormValue("tags"), "\n")
-	page := Page{
-		Title:        title,
-		Instructions: instructions,
-		Youtubes:     youtubes,
-		Articles:     articles,
-		Tags:         tags,
-	}
-
-	_, err := DB.ExecOne(`INSERT INTO pages VALUES (?title, ?instructions, ?youtubes, ?articles, ?tags)`, page)
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println(page)
-}
-
 func main() {
 	SetupDB()
 	train.ConfigureHttpHandler(nil)
@@ -88,6 +60,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/search", searchPageHandler)
 	http.HandleFunc("/admin", adminHandler)
 	http.HandleFunc("/admin/pages/create", createPageHandler)
 	http.ListenAndServe(":"+port, nil)
