@@ -1,0 +1,1 @@
+(function(){var f,g,c,a,b,d,e;b=typeof exports!=="undefined"&&exports!==null?exports:this;e=React.DOM,d=e.ul,a=e.li,g=e.div,c=e.input;f=React.createClass({displayName:"AdminMain",render:function(){return g({},"Admin home page")}});b.adminMain=f}).call(this);
