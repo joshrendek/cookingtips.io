@@ -1,1 +1,1 @@
-web: cookingtips.io
+web: ./bin/cookingtips.io
