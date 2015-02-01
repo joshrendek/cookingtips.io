@@ -15,7 +15,16 @@ var err error
 var DB *pg.DB
 
 func SetupDB() {
-	DB = pg.Connect(&pg.Options{User: "joshrendek", Database: "cookingtips"})
+	opts := &pg.Options{User: "joshrendek", Database: "cookingtips"}
+	if os.Getenv("DB_HOST") != "" {
+		opts = &pg.Options{
+			User:     os.Getenv("DB_USER"),
+			Database: "cookingtips",
+			Host:     os.Getenv("DB_HOST"),
+			Password: os.Getenv("DB_PASS"),
+		}
+	}
+	DB = pg.Connect(opts)
 	if err != nil {
 		panic(err)
 	}
