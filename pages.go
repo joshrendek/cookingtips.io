@@ -1,8 +1,13 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"github.com/gorilla/mux"
 	_ "gopkg.in/pg.v2"
 	"net/http"
+	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -22,11 +27,70 @@ type Page struct {
 	Youtubes     []string
 	Articles     []string
 	Tags         []string
+	Url          string // used to generate the url to go to
+}
+
+type Pages []*Page
+
+func (pages *Pages) New() interface{} {
+	p := &Page{}
+	*pages = append(*pages, p)
+	return p
+}
+
+func viewPageHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.ParseInt(vars["id"], 10, 64)
+	if err != nil {
+		panic(err)
+	}
+
+	page := &Page{}
+	_, err = DB.QueryOne(page, `SELECT * FROM pages WHERE id = ?`, id)
+
+	if err != nil {
+		panic(err)
+	}
+
+	data := struct {
+		Page         Page
+		LandingImage string
+	}{
+		*page,
+		landingImage(),
+	}
+
+	Render(w, "view", data)
+}
+
+func YoutubeURL(youtube string) string {
+	uri, _ := url.Parse(youtube)
+	code := strings.Split(uri.RawQuery, "=")[1]
+	return fmt.Sprintf("http://www.youtube.com/embed/%s#%s", code, uri.Fragment)
+}
+
+func (p *Page) Urlify() *Page {
+	p.Url = strings.ToLower(fmt.Sprintf("/tips/%d-%s", p.Id, p.Title))
+	return p
 }
 
 func searchPageHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	// select * from pages where title ~* 'dic';
+	var pages Pages
+	searchTerm := r.FormValue("q")
+	fmt.Println(searchTerm)
+	_, err := DB.Query(&pages, "select * from pages where title ~* ?;", searchTerm)
+	if err != nil {
+		panic(err)
+	}
+
+	// TODO: maybe apply this to the struct of Pages instead
+	for _, p := range pages {
+		p.Urlify()
+	}
+
+	js, err := json.Marshal(pages)
+	w.Write(js)
 }
 
 func createPageHandler(w http.ResponseWriter, r *http.Request) {

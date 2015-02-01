@@ -1,0 +1,63 @@
+{{ define "view" }}
+<html>
+    <head>
+        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src="http://fb.me/react-0.12.2.js"></script>
+        <link href='http://fonts.googleapis.com/css?family=Allura' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+        {{stylesheet_tag "main"}}
+        {{javascript_tag "main"}}
+    </head>
+    <body style="background-image: url('/assets/images/{{.LandingImage}}')">
+
+        <div class="container">
+            <div class='row header--container-sm'>
+                <div class="col-md-5">
+                    <h1 class='header--small'>
+                        <a href="/">CookingTips.io</a>
+                    </h1>
+                </div>
+                <div class="col-md-7 align-right">
+                    <div data-ui="search"></div>
+                </div>
+            </div>
+        </div>
+        <div class='container container--white'>
+            <h1 class='page--title'>{{ .Page.Title }}</h1>
+            <hr>
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>Instructions</h2>
+                    <ol>
+                        {{ range $val := .Page.Instructions }}
+                            <li>{{ $val }}</li>
+                        {{ end }}
+                    </ol>
+
+                    <h2>Articles</h2>
+                    <ol>
+                        {{ range $val := .Page.Articles }}
+                            <li>
+                                <a href="{{ $val }}" rel="nofollow">
+                                    {{ $val }}
+                                </a>
+                            </li>
+                        {{ end }}
+                    </ol>
+
+                </div>
+                <div class="col-md-8 page--videos">
+                    <h2>Video Tutorials</h2>
+                    {{ range $val := .Page.Youtubes}}
+                        <iframe id="ytplayer" type="text/html" width="640" height="390" src="{{ YoutubeURL $val }}" frameborder="0"></iframe>
+                    {{ end }}
+                </div>
+            </div>
+        </div>
+        <script>
+         React.render(window.search(), document.querySelector("[data-ui='search']"));
+        </script>
+    </body>
+</html>
+{{ end }}
