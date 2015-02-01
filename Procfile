@@ -1,1 +1,1 @@
-web: bin/cookingtips.io
+web: start.sh
