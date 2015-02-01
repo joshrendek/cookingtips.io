@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/shaoshing/train"
 	"gopkg.in/pg.v2"
@@ -52,7 +53,9 @@ func adminHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	fmt.Println("Setting up DB...")
 	SetupDB()
+	fmt.Println("Finished setting up DB...")
 	train.ConfigureHttpHandler(nil)
 	train.Config.BundleAssets = false
 	port := os.Getenv("PORT")
