@@ -1,6 +1,6 @@
 root = exports ? this
 
-{h1, label, ul, form, li, textarea, div, input} = React.DOM
+{h1, button, label, ul, form, li, textarea, div, input} = React.DOM
 
 NewPage = React.createClass
   displayName: 'NewPage'
@@ -46,6 +46,8 @@ NewPage = React.createClass
         div className: 'form-group col-md-6',
           label {}, 'Tags'
           textarea className: 'form-control', placeholder: 'Tags, one per line', ref: 'tags'
+        div className: 'form-group col-md-12',
+          button className: 'btn btn-primary col-md-12', 'Add Page'
 
 
 Admin = React.createClass

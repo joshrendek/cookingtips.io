@@ -1,5 +1,5 @@
 root = exports ? this
-{div, form, ul, li, input} = React.DOM
+{div, i, form, ul, li, input} = React.DOM
 Search = React.createClass
   displayName: 'Search'
 
@@ -48,8 +48,14 @@ Search = React.createClass
       ul {},
         @state.results.map (page, index) =>
           className = if index == @state.index then 'search--selected' else ''
-          li {className: className},
-            page.Title
+          li {},
+            div className: "search--row #{className}",
+              div className: 'search--title',
+                page.Title
+              div className: 'search--icons',
+                div {}, "#{page.Instructions.length} Steps"
+                div {}, "#{page.Youtubes.length} Videos"
+                div {}, "#{page.Articles.length} Articles"
 
   render: ->
     div className: 'search--form',
