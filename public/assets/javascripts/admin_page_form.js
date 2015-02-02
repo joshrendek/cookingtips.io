@@ -1,0 +1,1 @@
+(function(){var b,a;a=typeof exports!=="undefined"&&exports!==null?exports:this;b=React.createClass({displayName:"PageForm",render:function(){}});a.pageForm=b}).call(this);

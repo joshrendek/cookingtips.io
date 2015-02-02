@@ -43,12 +43,15 @@ Search = React.createClass
 
     #@refs.searchInput.getDOMNode().className = 'form-control transition-left'
 
+  clickItem: (index) ->
+    window.location = @state.results[index].Url
+
   searchResults: ->
     div className: 'search--results',
       ul {},
         @state.results.map (page, index) =>
           className = if index == @state.index then 'search--selected' else ''
-          li {},
+          li onClick: (=> @clickItem(index)),
             div className: "search--row #{className}",
               div className: 'search--title',
                 page.Title

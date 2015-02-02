@@ -49,8 +49,9 @@
                 </div>
                 <div class="col-md-8 page--videos">
                     <h2>Video Tutorials</h2>
-                    {{ range $val := .Page.Youtubes}}
-                        <iframe id="ytplayer" type="text/html" width="640" height="390" src="{{ YoutubeURL $val }}" frameborder="0"></iframe>
+                    {{ $counter := 0 }}
+                    {{ range $index, $val := .Page.Youtubes}}
+                        <iframe id="ytplayer" type="text/html" width="640" height="390" src="{{ YoutubeURL $val $index }}" frameborder="0"></iframe>
                     {{ end }}
                 </div>
             </div>

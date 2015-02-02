@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-// create table pages(
+//create table pages(
 //id serial primary key not null,
 //title varchar(255),
 //instructions text[],
@@ -36,6 +36,18 @@ func (pages *Pages) New() interface{} {
 	p := &Page{}
 	*pages = append(*pages, p)
 	return p
+}
+
+func listPagesHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var pages Pages
+	_, err := DB.Query(&pages, "select * from pages")
+	if err != nil {
+		panic(err)
+	}
+
+	js, err := json.Marshal(pages)
+	w.Write(js)
 }
 
 func viewPageHandler(w http.ResponseWriter, r *http.Request) {
@@ -63,10 +75,14 @@ func viewPageHandler(w http.ResponseWriter, r *http.Request) {
 	Render(w, "view", data)
 }
 
-func YoutubeURL(youtube string) string {
+func YoutubeURL(youtube string, x int) string {
 	uri, _ := url.Parse(youtube)
 	code := strings.Split(uri.RawQuery, "=")[1]
-	return fmt.Sprintf("http://www.youtube.com/embed/%s#%s", code, uri.Fragment)
+	autoplay := ""
+	if x == 0 {
+		autoplay = "?autoplay=1"
+	}
+	return fmt.Sprintf("http://www.youtube.com/embed/%s%s#%s", code, autoplay, uri.Fragment)
 }
 
 func (p *Page) Urlify() *Page {
@@ -78,7 +94,6 @@ func searchPageHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var pages Pages
 	searchTerm := r.FormValue("q")
-	fmt.Println(searchTerm)
 	_, err := DB.Query(&pages, "select * from pages where title ~* ?;", searchTerm)
 	if err != nil {
 		panic(err)

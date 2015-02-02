@@ -39,12 +39,17 @@ func landingImage() string {
 	return landingImages[rand.Intn(len(landingImages))]
 }
 
+func Add(x, y int) int {
+	return x + y
+}
+
 func Render(w http.ResponseWriter, name string, extra interface{}) {
 	w.Header().Set("Content-Type", "text/html")
 	tpl := template.New(name)
 	tpl.Funcs(train.HelperFuncs)
 	tpl.Funcs(template.FuncMap{
 		"YoutubeURL": YoutubeURL,
+		"add":        Add,
 	})
 	tpl, err := tpl.ParseFiles("templates/" + name + ".html")
 	if err != nil {
@@ -75,6 +80,7 @@ func main() {
 	r.HandleFunc("/", indexHandler)
 	r.HandleFunc("/search", searchPageHandler)
 	r.HandleFunc("/admin", adminHandler)
+	r.HandleFunc("/admin/pages", listPagesHandler)
 	r.HandleFunc("/admin/pages/create", createPageHandler)
 	r.HandleFunc("/tips/{id:[0-9]+}-{title}", viewPageHandler)
 	http.Handle("/", r)
