@@ -50,6 +50,24 @@ func listPagesHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(js)
 }
 
+func adminViewPageHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.ParseInt(vars["id"], 10, 64)
+	if err != nil {
+		panic(err)
+	}
+
+	page := &Page{}
+	_, err = DB.QueryOne(page, `SELECT * FROM pages WHERE id = ?`, id)
+
+	if err != nil {
+		panic(err)
+	}
+
+	js, err := json.Marshal(page)
+	w.Write(js)
+}
+
 func viewPageHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.ParseInt(vars["id"], 10, 64)

@@ -2,6 +2,7 @@ root = exports ? this
 {h1, button, label, ul, form, li, textarea, div, input} = React.DOM
 NewPage = React.createClass
   displayName: 'NewPage'
+  mixins: [window.pageForm]
 
   createPage: (e) ->
     e.preventDefault()
@@ -28,23 +29,6 @@ NewPage = React.createClass
   render: ->
     form onSubmit: @createPage, ref: 'newPageForm',
       h1 {}, 'Add New Page'
-      div className: 'row',
-        div className: 'form-group col-md-12',
-          label {}, 'Title'
-          input className: 'form-control', placeholder: 'Title', ref: 'title'
-        div className: 'form-group col-md-6',
-          label {}, 'Instructions'
-          textarea className: 'form-control', placeholder: 'Instructions, one per line', ref: 'instructions'
-        div className: 'form-group col-md-6',
-          label {}, 'Youtube Videos'
-          textarea className: 'form-control', placeholder: 'Youtube links, one per line', ref: 'youtubes'
-        div className: 'form-group col-md-6',
-          label {}, 'Articles'
-          textarea className: 'form-control', placeholder: 'Articles, one per line', ref: 'articles'
-        div className: 'form-group col-md-6',
-          label {}, 'Tags'
-          textarea className: 'form-control', placeholder: 'Tags, one per line', ref: 'tags'
-        div className: 'form-group col-md-12',
-          button className: 'btn btn-primary col-md-12', 'Add Page'
+      @showForm()
 
 root.newPage = NewPage

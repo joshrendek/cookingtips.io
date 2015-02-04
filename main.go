@@ -81,6 +81,7 @@ func main() {
 	r.HandleFunc("/search", searchPageHandler)
 	r.HandleFunc("/admin", adminHandler)
 	r.HandleFunc("/admin/pages", listPagesHandler)
+	r.HandleFunc("/admin/page/{id:[0-9]+}", adminViewPageHandler)
 	r.HandleFunc("/admin/pages/create", createPageHandler)
 	r.HandleFunc("/tips/{id:[0-9]+}-{title}", viewPageHandler)
 	http.Handle("/", r)

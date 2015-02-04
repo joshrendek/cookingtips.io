@@ -4,9 +4,11 @@ root = exports ? this
 
 ListPages = React.createClass
   displayName: 'ListPages'
+  mixins: [window.pageForm]
 
   getInitialState: ->
     pages: []
+    editing: null
 
   componentDidMount: ->
     $.ajax
@@ -14,16 +16,21 @@ ListPages = React.createClass
       url: '/admin/pages'
       dataType: 'json'
       success: (data) =>
-        @setState(pages: data)
+        @setState(pages: data, editing: null, page: null)
 
-  editPage: ->
-    console.log 'edit'
+  editPage: (id) ->
+    $.ajax
+      type: 'get'
+      url: '/admin/page/' + id
+      dataType: 'json'
+      success: (data) =>
+        @setState(editing: id, page: data)
 
   render: ->
     div {},
       @state.pages.map (page, index) =>
         div {},
-          a onClick: @editPage, page.Title
+          a onClick: (=> @editPage(page.Id)), page.Title
 
 Admin = React.createClass
   displayName: 'Admin'
@@ -31,13 +38,21 @@ Admin = React.createClass
   getInitialState: ->
     displaying: ListPages
 
+  listPages: ->
+    @setState(displaying: ListPages)
+
   render: ->
     div className: 'container-fluid',
       div className: 'row admin--container',
         div className: 'col-md-2',
-          ul {},
-            li onClick: (=> @setState(displaying: NewPage)), 'Add Item',
+          ul className: 'admin--nav',
+            li {},
+              a onClick: @listPages, 'List'
+            li {},
+              a onClick: (=> @setState(displaying: NewPage)), 'Add Item'
         div className: 'col-md-10',
           @state.displaying()
 
+
 root.admin = Admin
+root.listPages = ListPages

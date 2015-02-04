@@ -1,11 +1,12 @@
 {{ define "admin" }}
 <html>
     <head>
-        <script src="http://fb.me/react-0.12.2.min.js"></script>
         <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src="http://fb.me/react-0.12.2.js"></script>
         <link href='http://fonts.googleapis.com/css?family=Allura' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
+        {{javascript_tag "director"}}
         {{stylesheet_tag "admin"}}
         {{javascript_tag "admin_main"}}
         {{javascript_tag "admin_page_form"}}
@@ -16,7 +17,7 @@
     <body>
         <div data-ui="admin"></div>
         <script>
-         React.render(window.admin(), document.querySelector("[data-ui='admin']"))
+            router.init();
         </script>
     </body>
 </html>
