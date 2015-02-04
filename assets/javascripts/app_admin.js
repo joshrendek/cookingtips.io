@@ -9,6 +9,14 @@ var ListPages = window.listPages
 var appRoutes = {
     '/pages': function() {
         React.render(window.listPages(), document.querySelector("[data-ui='admin']"))
+    },
+
+    '/pages/new': function() {
+        React.render(window.newPage(), document.querySelector("[data-ui='admin']"))
+    },
+
+    '/pages/:id': function(id) {
+        React.render(window.editPage({id: id}), document.querySelector("[data-ui='admin']"))
     }
 };
 
